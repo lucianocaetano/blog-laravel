@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
 class UpdatePostRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdatePostRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,16 @@ class UpdatePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "title" => ["string", "max:50"],
+            "slug" => ["string"],
+            "description" => ["string"],
+            "content" => ["string"],
         ];
+    }
+
+    public function prepareForValidation() {
+        $this->merge([
+            'slug' => Str::slug($this->title . ' ' . uniqid()),
+        ]);
     }
 }

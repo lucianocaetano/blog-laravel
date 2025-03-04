@@ -21,7 +21,7 @@ class PostFactory extends Factory
 
         return [
             "title" => $title,
-            "description" => $this->faker->paragraph(),
+            "description" => $this->faker->text(),
             "content" => $this->faker->paragraph(),
             "slug" => str($title)->slug()->value(),
         ];

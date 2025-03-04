@@ -1,4 +1,4 @@
-@extends("layouts.app")
+@extends("layouts.dashboard")
 
 @section("content")
     <div class="mx-auto mt-8 h-[600px] overflow-y-scroll">
@@ -56,7 +56,7 @@
             </tbody>
         </table>
     </div>
-    <nav class="flex justify-center mt-2">
+    <nav class="flex justify-center items-center mt-2">
         <ul class="inline-flex -space-x-px text-base h-10">
             <li>
                 <a href="{{$posts->previousPageUrl()}}" class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
@@ -74,5 +74,6 @@
                 <a href="{{$posts->nextPageUrl()}}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
             </li>
         </ul>
+        <a class="flex ms-2 text-lg justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer py-2" href="{{route('dashboard.posts.create')}}">Crear post</a>
     </nav>
 @endsection

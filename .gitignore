@@ -5,6 +5,7 @@
 /public/storage
 /storage/*.key
 /vendor
+pnpm-lock.yaml
 .env
 .env.backup
 .env.production

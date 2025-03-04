@@ -4,12 +4,18 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Repositories\PostRepositoryInterface;
 
 class PostController extends Controller
 {
+
+    public function __construct(
+        public PostRepositoryInterface $postRepository
+    ) {
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -33,35 +39,40 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        $data = $request->validated();
+        $data = $request->safe()->except('categories');
+        $categories = $request->safe()->only('categories');
 
-        $request->user()->posts()->create($data);
+        $post = $request->user()->posts()->create($data);
 
-        return redirect()->route("dashboard.posts.index");
-    }
+        $this->postRepository->syncWithPost($post, $categories);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        return redirect()->with('success', 'Se a creado con éxito')->route("dashboard.posts.index");
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Post $post)
     {
-        //
+        $categories = $post->categories->pluck('slug')->implode(', ');
+
+        $categories_array = $post->categories->pluck('slug')->toArray();
+
+        $this->postRepository->syncWithPost($post, $categories_array);
+
+        return view("dashboard.posts.edit", ['post' => $post, 'categories' => $categories]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdatePostRequest $request, Post $post)
     {
-        //
+        $data = $request->validated();
+
+        $post->update($data);
+
+        return redirect()->with('success', 'Se actualizo con éxito')->route("dashboard.posts.index");
     }
 
     /**
@@ -71,6 +82,6 @@ class PostController extends Controller
     {
         $post->delete();
 
-        return back();
+        return back()->with('success', 'se borro con exito');
     }
 }

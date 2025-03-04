@@ -7,8 +7,8 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Dashboard\PostController as AdminPostController;
 use Illuminate\Support\Facades\Route;
 
-Route::name("dashboard.")->prefix("/dashboard")->group(function () {
-    Route::resource("posts", AdminPostController::class)->names("posts");
+Route::middleware(['auth'])->name("dashboard.")->prefix("/dashboard")->group(function () {
+    Route::resource("posts", AdminPostController::class)->names("posts")->except(["show"]);
 });
 
 Route::name("views.")->group(function () {
